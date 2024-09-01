@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -34,24 +35,40 @@ public class MainActivity extends AppCompatActivity {
         spieler = new Spieler(this); //Spieler Instanzieren
         frameLayoutContainer.addView(spieler.getframeLayoutSpieler()); //Spieler in Container einfügen mit frameLayoutSpieler
 
-                                    //linksBtn //ACTION_DOWN, ACTION_UP
+        //linksBtn //ACTION_DOWN, ACTION_UP
         linksBtn.setOnTouchListener((view, event) -> onTouchListener(view, event, -15));
         rechtsBtn.setOnTouchListener((view, event) -> onTouchListener(view, event, 15));
 
 
+        timer = new Timer();
+        task = new TimerTask() {
+            @Override
+            public void run() {
+                // Diese Methode wird alle 1000 ms (1 Sekunde) aufgerufen
+                runOnUiThread(new Runnable() { // Da UI-Updates auf dem UI-Thread erfolgen müssen
+                    @Override
+                    public void run() {
+                        spieler.updatePosition(0, 1);
+                    }
+                });
 
-//        timer = new Timer();
-//        task = new TimerTask() {
-//            @Override
-//            public void run() {
-//                timer.schedule(task, 0, 1000); // Startet den Timer sofort und wiederholt alle 1000ms
-//            }
+//                ImageView groud = findViewById(R.id.GroudImg);
+//                int groudY = groud.getTop();
+//                if (spieler.getPosy() + spieler.frameLayoutSpieler.getHeight() >= groudY) {
+//                    // Stoppe den Timer
+//                    timer.cancel();
+//
+//                    // Setze die Position des Spielers genau auf den Boden
+//                    spieler.setPosy(groudY - spieler.frameLayoutSpieler.getHeight());
+//                }
+            }
         };
 
-//        stopButton.setOnClickListener(v -> {
-//            stopTimer(); // Timer stoppen, wenn der Button gedrückt wird
-//        });
-    //}
+        // Starte den Timer sofort und wiederhole alle 10ms
+        timer.schedule(task, 0, 10);
+
+    }
+
 
     public void animation(int sposx){
         // Initialisiere den ValueAnimator für die Bewegung
@@ -86,8 +103,6 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
-
-
 
     //region Landscape Mode
     @Override

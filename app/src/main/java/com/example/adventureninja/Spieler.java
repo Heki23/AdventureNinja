@@ -66,8 +66,6 @@ public class Spieler {
         posx += deltaX;
         posy += deltaY;
 
-
-
         // Layout-Parameter aktualisieren
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) frameLayoutSpieler.getLayoutParams();
         params.leftMargin = posx;
